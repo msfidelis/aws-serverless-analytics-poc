@@ -1,4 +1,7 @@
 resource "aws_redshift_cluster" "main" {
+
+    count                 = var.redshift_setup ? 1 : 0 
+
     cluster_identifier    = "redshift-cluster-analytics"
     database_name         = "mydb"
     master_username       = "fidelaomilgrau"

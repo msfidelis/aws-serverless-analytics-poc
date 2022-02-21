@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "data" {
-  bucket = format("aws-data-serverless-analytics-%s", data.aws_caller_identity.current.account_id)
+  bucket = format("aws-redshift-serverless-analytics-%s", data.aws_caller_identity.current.account_id)
 }
 
 resource "aws_s3_bucket_analytics_configuration" "citydata" {

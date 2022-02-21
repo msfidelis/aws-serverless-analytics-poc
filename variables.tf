@@ -14,3 +14,11 @@ variable "subnets" {
       "subnet-23a9760d"
   ]
 }
+
+variable "redshift_setup" {
+  default = false
+}
+
+variable "glue_setup" {
+  default = false
+}
