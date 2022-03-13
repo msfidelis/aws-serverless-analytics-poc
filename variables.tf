@@ -1,3 +1,7 @@
+variable "project_name" {
+  default = "serverless-analytics-poc"
+}
+
 variable "region" {
   default = "us-east-1"
 }
@@ -21,4 +25,8 @@ variable "redshift_setup" {
 
 variable "glue_setup" {
   default = false
+}
+
+variable "lambda_fake_batch_size" {
+  default = 1
 }
