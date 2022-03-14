@@ -6,21 +6,21 @@ const os = require("os")
 
 var s3 = new AWS.S3({})
 
-exports.handler = async (event, context, callback) => {
+exports.handler = (event, context, callback) => {
 
     const date = new Date()
     const key = date.toISOString().slice(0, 10)
 
-    console.log(key)
+    console.log("Key:", key)
 
     const payment_data = {
-        id: faker.datatype.uuid(),
-        name: faker.name.firstName(),
-        last_name: faker.name.lastName(),
-        amount: faker.finance.amount(),
-        description: faker.lorem.paragraph(),
-        vehicle: faker.vehicle.vehicle(),
-        country: faker.address.country()
+        id:             faker.datatype.uuid(),
+        name:           faker.name.firstName(),
+        last_name:      faker.name.lastName(),
+        amount:         faker.finance.amount(),
+        description:    faker.lorem.paragraph(),
+        vehicle:        faker.vehicle.vehicle(),
+        country:        faker.address.country()
     }
 
     const params = {
@@ -29,15 +29,14 @@ exports.handler = async (event, context, callback) => {
         Key: `${key}/${payment_data.id}.json`,
     };
 
-    s3.putObject(params, (err, data) => {
-        if (err) {
-            console.log(err)
-        }
-        console.log("Sucess to Upload Data", data)
-    })
+    console.log("Payload: ", params)
 
-    console.log(payment_data)
+    const save = s3.putObject(params).promise()
 
+    save
+        .then(ok => context.success(ok))
+        .catch(err => context.fail(err))
 
+    console.log("done")
 
 }

@@ -22,17 +22,24 @@ resource "aws_lambda_function" "fake_data" {
   function_name = format("%s-fake-data", var.project_name)
   role          = aws_iam_role.fake_data.arn
   handler       = "index.handler"
+  timeout       = 120  
 
   source_code_hash = data.archive_file.lambda_source_package.output_sha
 
   runtime = "nodejs12.x"
 
   vpc_config {
-    subnet_ids         = var.subnets
+    subnet_ids         = [
+      aws_subnet.public_subnet_1a.id,
+      aws_subnet.public_subnet_1b.id,
+      aws_subnet.public_subnet_1c.id
+
+    ]
     security_group_ids = [
         aws_security_group.fake_data.id
     ]
   }
+  
 
 
   environment {
