@@ -1,9 +1,3 @@
-# resource "aws_glue_catalog_database" "db" {
-#   name          = "sampledb"
-#   description   = "sample database"
-#   location_uri  = "/samples/database/"
-# }
-
 # resource "aws_glue_catalog_table" "citydata" {
 #   name          = "mycitydata"
 #   database_name = "sampledb"
@@ -57,12 +51,41 @@
 
 # }
 
-# resource "aws_glue_crawler" "cities" {
-#   database_name = aws_glue_catalog_database.db.name
-#   name          = "cities"
-#   role          = aws_iam_role.glue.arn
+resource "aws_glue_catalog_database" "raw" {
+  name          = "raw-database"
+  description   = "Glue ETL for Raw Files"
+  location_uri  = "/raw/database/"
+}
 
-#   s3_target {
-#     path = "s3://${aws_s3_bucket.data_glue.bucket}/"
-#   }
-# }
+resource "aws_glue_security_configuration" "raw_bucket" {
+  name = "raw-data"
+
+  encryption_configuration {
+    cloudwatch_encryption {
+      cloudwatch_encryption_mode = "DISABLED"
+    }
+
+    job_bookmarks_encryption {
+      job_bookmarks_encryption_mode = "DISABLED"
+    }
+
+    s3_encryption {
+      kms_key_arn        = aws_kms_key.main.arn
+      s3_encryption_mode = "SSE-KMS"
+    }
+  }
+}
+
+resource "aws_glue_crawler" "raw_bucket" {
+  database_name = aws_glue_catalog_database.raw.name
+  name          = "raw-data"
+  role          = aws_iam_role.glue.arn
+
+  schedule      = var.glue_raw_data_crawler_schedule
+
+  s3_target {
+    path = "s3://${aws_s3_bucket.raw_bucket.bucket}/"
+  }
+
+  security_configuration = aws_glue_security_configuration.raw_bucket.id
+}

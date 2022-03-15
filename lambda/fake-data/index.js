@@ -13,30 +13,80 @@ exports.handler = (event, context, callback) => {
 
     console.log("Key:", key)
 
-    const payment_data = {
-        id:             faker.datatype.uuid(),
-        name:           faker.name.firstName(),
-        last_name:      faker.name.lastName(),
-        amount:         faker.finance.amount(),
-        description:    faker.lorem.paragraph(),
-        vehicle:        faker.vehicle.vehicle(),
-        country:        faker.address.country()
+    let v = 0;
+    while (v <= process.env.NUMBER_OF_FILES) {
+        let body = ""
+        let i = 0;
+        while (i <= process.env.BATCH_SIZE) {
+
+            let payment_data = {
+                id: faker.datatype.uuid(),
+                name: faker.name.firstName(),
+                last_name: faker.name.lastName(),
+                amount: faker.finance.amount(),
+                description: faker.lorem.paragraph(),
+                vehicle: faker.vehicle.vehicle(),
+                country: faker.address.country()
+            }
+
+            body = body + JSON.stringify(payment_data) + "\n"
+            i++
+        }
+
+        const filename = faker.datatype.uuid()
+        const params = {
+            Body: body,
+            Bucket: process.env.BUCKET_RAW,
+            Key: `${key}/${filename}.json`,
+        };
+
+        console.log("Payload: ", params)
+
+
+        const save = s3.putObject(params).promise()
+
+        save
+            .then(ok => context.succeed(ok))
+            .catch(err => context.fail(err))
+        v++
     }
 
-    const params = {
-        Body: String(JSON.stringify(payment_data)),
-        Bucket: process.env.BUCKET_RAW,
-        Key: `${key}/${payment_data.id}.json`,
-    };
+    // console.log(items)
 
-    console.log("Payload: ", params)
+    // var body = ""
 
-    const save = s3.putObject(params).promise()
+    // let i = 0;
+    // while (i <= process.env.BATCH_SIZE) {
 
-    save
-        .then(ok => context.success(ok))
-        .catch(err => context.fail(err))
+    //     let payment_data = {
+    //         id:             faker.datatype.uuid(),
+    //         name:           faker.name.firstName(),
+    //         last_name:      faker.name.lastName(),
+    //         amount:         faker.finance.amount(),
+    //         description:    faker.lorem.paragraph(),
+    //         vehicle:        faker.vehicle.vehicle(),
+    //         country:        faker.address.country()
+    //     }
 
-    console.log("done")
+    //     body = body + JSON.stringify(payment_data) + "\n"
+    //     i++
+    // }
+
+    // const filename = faker.datatype.uuid()
+    // const params = {
+    //     Body: body,
+    //     Bucket: process.env.BUCKET_RAW,
+    //     Key: `${key}/${filename}.json`,
+    // };
+
+    // console.log("Payload: ", params)
+
+    // const save = s3.putObject(params).promise()
+
+    // save
+    //     .then(ok => context.succeed(ok))
+    //     .catch(err => context.fail(err))
+
+    // console.log("done")
 
 }

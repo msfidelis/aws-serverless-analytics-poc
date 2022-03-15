@@ -28,5 +28,17 @@ variable "glue_setup" {
 }
 
 variable "lambda_fake_batch_size" {
-  default = 1
+  default = 10
+}
+
+variable "lambda_fake_number_files" {
+  default = 10 
+}
+
+variable "lambda_fake_cron" {
+  default = "rate(1 minute)"
+}
+
+variable "glue_raw_data_crawler_schedule" {
+   default = "cron(30 * * * ? *)"
 }

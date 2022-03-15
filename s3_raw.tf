@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "raw_bucket" {
-  bucket = format("raw-data-bucket-%s", data.aws_caller_identity.current.account_id)
+  bucket = format("aws-glue-raw-data-bucket-%s", data.aws_caller_identity.current.account_id)
 }
 
 resource "aws_s3_bucket_acl" "raw_bucket" {

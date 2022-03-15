@@ -46,7 +46,7 @@ resource "aws_subnet" "public_subnet_1c" {
 }
 
 resource "aws_internet_gateway" "gw" {
-    vpc_id = aws_vpc.cluster_vpc.id
+    vpc_id = aws_vpc.main.id
 
     tags = {
         Name = format("%s-internet-gateway", var.project_name)
@@ -54,7 +54,7 @@ resource "aws_internet_gateway" "gw" {
 }
 
 resource "aws_route_table" "igw_route_table" {
-    vpc_id = aws_vpc.cluster_vpc.id
+    vpc_id = aws_vpc.main.id
 
     tags = {
         Name = format("%s-public-route", var.project_name)
