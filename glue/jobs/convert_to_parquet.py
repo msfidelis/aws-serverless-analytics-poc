@@ -9,9 +9,9 @@ from datetime import date
 
 args = getResolvedOptions(sys.argv, [
 	'JOB_NAME',
-	'source-bucket',
-	'lake-bucket',
-	'number-of-partitions'
+	'source_bucket',
+	'lake_bucket',
+	'number_of_partitions'
 ])
 
 print("AQUI OS ARGS")
@@ -25,10 +25,10 @@ key = date.today()
 job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
-inputPath = args['source-bucket'] + '/' + key
-outputPath = args['lake-bucket']  + '/' + key
+inputPath = args['source_bucket'] + '/' + key
+outputPath = args['lake_bucket']  + '/' + key
 
-numberOfPartitions = int(args.get('number-of-partitions', 1))
+numberOfPartitions = int(args.get('number_of_partitions', 1))
 
 input_dyf = glueContext.create_dynamic_frame_from_options("s3", {
 		"paths": [ inputPath ],
