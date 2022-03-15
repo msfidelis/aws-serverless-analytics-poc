@@ -58,7 +58,7 @@ resource "aws_glue_catalog_database" "raw" {
 }
 
 resource "aws_glue_security_configuration" "raw_bucket" {
-  name = "raw-data"
+  name = format("%s-raw-data", var.project_name)
 
   encryption_configuration {
     cloudwatch_encryption {
@@ -78,7 +78,7 @@ resource "aws_glue_security_configuration" "raw_bucket" {
 
 resource "aws_glue_crawler" "raw_bucket" {
   database_name = aws_glue_catalog_database.raw.name
-  name          = "raw-data"
+  name          = format("%s-raw-data", var.project_name)
   role          = aws_iam_role.glue.arn
 
   schedule      = var.glue_raw_data_crawler_schedule

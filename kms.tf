@@ -3,7 +3,7 @@ resource "aws_kms_key" "main" {
 }
 
 resource "aws_iam_role" "glue_grant" {
-  name = "iam-role-for-grant"
+  name = format("%s-iam-role-for-grant", var.project_name)
 
   assume_role_policy = <<EOF
 {
@@ -23,7 +23,7 @@ EOF
 }
 
 resource "aws_kms_grant" "glue_grant" {
-  name              = "grant-to-glue"
+  name              = format("%s-grant-to-glue", var.project_name)
   key_id            = aws_kms_key.main.key_id
   grantee_principal = aws_iam_role.glue_grant.arn
   operations        = ["Encrypt", "Decrypt", "GenerateDataKey"]

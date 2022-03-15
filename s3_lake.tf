@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "lake_bucket" {
-  bucket = format("aws-glue-lake-data-bucket-%s", data.aws_caller_identity.current.account_id)
+  bucket = format("aws-glue-lake-data-%s-%s", var.project_name, data.aws_caller_identity.current.account_id)
 }
 
 resource "aws_s3_bucket_acl" "lake_bucket" {

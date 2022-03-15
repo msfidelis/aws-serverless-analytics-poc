@@ -6,19 +6,6 @@ variable "region" {
   default = "us-east-1"
 }
 
-variable "vpc" {
-    default = "vpc-ba8b92c1"
-}
-
-variable "subnets" {
-  type      = list
-  default   = [
-      "subnet-29954875",
-      "subnet-c832eeaf",
-      "subnet-23a9760d"
-  ]
-}
-
 variable "redshift_setup" {
   default = false
 }
@@ -41,4 +28,8 @@ variable "lambda_fake_cron" {
 
 variable "glue_raw_data_crawler_schedule" {
    default = "cron(30 * * * ? *)"
+}
+
+variable "glue_data_lake_crawler_schedule" {
+  default = "cron(30 * * * ? *)"
 }
