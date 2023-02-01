@@ -24,7 +24,7 @@ resource "aws_lambda_function" "fake_data" {
   handler       = "index.handler"
   timeout       = 120  
 
-  source_code_hash = filesha256("fake-data-lambda.zip")
+  source_code_hash = data.archive_file.lambda_source_package.output_md5
 
   runtime = "nodejs12.x"
 

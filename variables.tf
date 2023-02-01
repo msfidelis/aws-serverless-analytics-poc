@@ -33,3 +33,11 @@ variable "glue_raw_data_crawler_schedule" {
 variable "glue_data_lake_crawler_schedule" {
   default = "cron(30 * * * ? *)"
 }
+
+variable "sagemaker_git_code_repo_url" {
+  default = "https://github.com/msfidelis/aws-serverless-analytics-poc"
+}
+
+variable "sagemaker_instance_type" {
+  default = "ml.t2.medium"
+}
